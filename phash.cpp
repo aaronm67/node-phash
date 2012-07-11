@@ -1,15 +1,22 @@
 #include <v8.h>
 #include <node.h>
+#include <pHash.h>
 
 using namespace node;
 using namespace v8;
 
-static Handle<Value> foo(const Arguments& args)
-{
-  return String::New("Hello World");
+const char* ToCString(const String::Utf8Value& value) {
+    return *value ? *value : "<string conversion failed>";
 }
 
-extern "C" void init(Handle<Object> target)
-{
-  NODE_SET_METHOD(target, "foo", foo);
+static Handle<Value> imagehash(const Arguments& args) {
+    String::Utf8Value str(args[0]);
+    const char* file = ToCString(str);
+    ulong64 hash = 0;
+    ph_dct_imagehash(file, hash);
+    return Number::New(hash);
+}
+
+extern "C" void init(Handle<Object> target) {
+    NODE_SET_METHOD(target, "imagehash", imagehash);
 }
