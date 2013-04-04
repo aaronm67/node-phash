@@ -1,5 +1,5 @@
-phash-node.js
-=============
+node-phash
+==========
 
 Phash Bindings for Node.js
 

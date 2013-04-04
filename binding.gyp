@@ -1,8 +1,8 @@
 {
   'targets': [
     {
-      'target_name': 'phash',
-      'sources': [ 'phash.cpp' ],
+      'target_name': 'pHash',
+      'sources': [ 'pHash.cpp' ],
       'cflags_cc': ['-fexceptions'],
       'link_settings': {
         'libraries': ['-lpHash']

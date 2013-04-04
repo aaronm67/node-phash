@@ -21,5 +21,4 @@ void init(Handle<Object> target) {
     NODE_SET_METHOD(target, "imagehash", imagehash);
 }
 
-NODE_MODULE(phash, init);
-
+NODE_MODULE(pHash, init);
