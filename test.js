@@ -1,4 +1,4 @@
-var ph = require('./phash');
+var ph = require('./build/Release/phash');
 
-var hash = ph.imagehash("test.png");
+var hash = ph.imagehash("a.jpg");
 console.log(hash);

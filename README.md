@@ -5,4 +5,4 @@ Phash Bindings for Node.js
 
 Instructions:
 
-    node-waf configure build
+    node-gyp configure build

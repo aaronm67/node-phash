@@ -17,6 +17,9 @@ static Handle<Value> imagehash(const Arguments& args) {
     return Number::New(hash);
 }
 
-extern "C" void init(Handle<Object> target) {
+void init(Handle<Object> target) {
     NODE_SET_METHOD(target, "imagehash", imagehash);
 }
+
+NODE_MODULE(phash, init);
+
