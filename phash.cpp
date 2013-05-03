@@ -16,6 +16,12 @@ static Handle<Value> imagehash(const Arguments& args) {
     ph_dct_imagehash(file, hash);
     return Number::New(hash);
 }
+static Handle<Value> compare(const Arguments& args) {
+	ulong64 hasha = args[0];
+	ulong64 hashb = args[1];
+	int distance = ph_hamming_distance(hasha, hashb);
+	return Number::New(distance);
+}
 
 void init(Handle<Object> target) {
     NODE_SET_METHOD(target, "imagehash", imagehash);
