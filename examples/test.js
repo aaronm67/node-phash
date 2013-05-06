@@ -2,7 +2,7 @@ var pHash = require('../index');
 
 var hashA = pHash.getImageHash("a.jpg");
 var hashB = pHash.getImageHash("b.png");
-var hashC = pHash.getImageHash("c.jpg");
+var hashC = pHash.getImageHash("c.png");
 
 var hammingAB = pHash.hammingDistance(hashA,hashB);
 var hammingAC = pHash.hammingDistance(hashA,hashC);
