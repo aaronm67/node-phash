@@ -5,11 +5,13 @@
 using namespace node;
 using namespace v8;
 
+
+
 const char* ToCString(const String::Utf8Value& value) {
     return *value ? *value : "<string conversion failed>";
 }
 
-static Handle<Value> imagehash(const Arguments& args) {
+Handle<Value> ImageHash(const Arguments& args) {
     String::Utf8Value str(args[0]);
     const char* file = ToCString(str);
     ulong64 hash = 0;
@@ -17,8 +19,25 @@ static Handle<Value> imagehash(const Arguments& args) {
     return Number::New(hash);
 }
 
+Handle<Value> HammingDistance(const Arguments& args) {
+    HandleScope scope;
+    uint32_t hasha = args[0]->ToUint32()->Value();
+	uint32_t hashb = args[1]->ToUint32()->Value();
+	int distance = ph_hamming_distance(hasha, hashb);
+	
+    return scope.Close(Integer::New(distance));
+}
+
+
+void RegisterModule(Handle<Object> target) {
+  NODE_SET_METHOD(target, "imagehash", ImageHash);
+  NODE_SET_METHOD(target, "imageHash", ImageHash);
+  NODE_SET_METHOD(target,"hammingDistance",HammingDistance);
+}
+
+/*
 void init(Handle<Object> target) {
     NODE_SET_METHOD(target, "imagehash", imagehash);
 }
-
-NODE_MODULE(pHash, init);
+*/
+NODE_MODULE(pHash, RegisterModule);
