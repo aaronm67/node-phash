@@ -1,11 +1,11 @@
 {
   "name": "phash",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Bindings for node.js to pHash",
   "main": "index",
   "repository": {
     "type" : "git",
-    "url" : "https://github.com/xissy/node-phash.git"
+    "url" : "https://github.com/aaronm67/node-phash.git"
   },
   "devDependencies": {
     "node-gyp": "*"
@@ -21,6 +21,7 @@
   "author": "Aaron Marasco <agm257@mail.missouri.edu>",
   "contributors": [
     "Aaron Marasco <agm257@mail.missouri.edu>",
-    "Taeho Kim <xissysnd@gmail.com>"
+    "Taeho Kim <xissysnd@gmail.com>",
+    "Jeremy Dowell <jeremy@codevinsky.com>"
   ]
 }
