@@ -12,11 +12,15 @@ const char* ToCString(const String::Utf8Value& value) {
 }
 
 Handle<Value> ImageHash(const Arguments& args) {
+  try {
     String::Utf8Value str(args[0]);
     const char* file = ToCString(str);
     ulong64 hash = 0;
     ph_dct_imagehash(file, hash);
     return Number::New(hash);
+  } catch(...) {
+    return Number::New(100);
+  }
 }
 
 Handle<Value> HammingDistance(const Arguments& args) {
