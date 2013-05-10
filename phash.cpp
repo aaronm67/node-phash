@@ -19,7 +19,7 @@ Handle<Value> ImageHash(const Arguments& args) {
     ph_dct_imagehash(file, hash);
     return Number::New(hash);
   } catch(...) {
-    return Number::New(100);
+    return Number::New(-1);
   }
 }
 
