@@ -12,19 +12,18 @@ const char* ToCString(const String::Utf8Value& value) {
 }
 
 template <typename T>
-    string NumberToString ( T Number ) {
-        ostringstream ss;
-        ss << Number;
-        return ss.str();
-    }
+string NumberToString ( T Number ) {
+    ostringstream ss;
+    ss << Number;
+    return ss.str();
+}
 
 template <typename T>
-    T StringToNumber ( const string &Text ) {
-        istringstream ss(Text);
-        T result;
-        return ss >> result ? result : 0;
-    }
-
+T StringToNumber ( const string &Text ) {
+    istringstream ss(Text);
+    T result;
+    return ss >> result ? result : 0;
+}
 
 Handle<Value> ImageHash(const Arguments& args) {
     HandleScope scope;
