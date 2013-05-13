@@ -2,7 +2,6 @@
 #include <node.h>
 #include <pHash.h>
 #include <sstream>
-#include <string>
 #include <cstdio>
 
 using namespace node;
@@ -13,26 +12,25 @@ const char* ToCString(const String::Utf8Value& value) {
 }
 
 template <typename T>
-  string NumberToString ( T Number )
-  {
-     ostringstream ss;
-     ss << Number;
-     return ss.str();
-  }
+    string NumberToString ( T Number )
+    {
+        ostringstream ss;
+        ss << Number;
+        return ss.str();
+    }
 
 template <typename T>
-  T StringToNumber ( const string &Text )
-  {
-     istringstream ss(Text);
-     T result;
-     return ss >> result ? result : 0;
-  }
-
+    T StringToNumber ( const string &Text )
+    {
+        istringstream ss(Text);
+        T result;
+        return ss >> result ? result : 0;
+    }
 
 
 Handle<Value> ImageHash(const Arguments& args) {
     HandleScope scope;
-    string result ;
+    string result;
 
     try {
         String::Utf8Value str(args[0]);
@@ -46,9 +44,9 @@ Handle<Value> ImageHash(const Arguments& args) {
         // return -1
         result = "-1";
     }
+
     return scope.Close(String::New(result.c_str()));
 }
-
 
 Handle<Value> HammingDistance(const Arguments& args) {
     HandleScope scope;
@@ -67,7 +65,18 @@ Handle<Value> HammingDistance(const Arguments& args) {
     return scope.Close(Number::New(distance));
 }
 
-
+/*
+    See https://github.com/aaronm67/node-phash/issues/4
+    V8 only supports 32 bit integers, so hashes must be returned as strings.
+    This is a legacy version that returns a 32 bit integer of the hash.
+*/
+Handle<Value> oldHash(const Arguments& args) {
+    String::Utf8Value str(args[0]);
+    const char* file = ToCString(str);
+    ulong64 hash = 0;
+    ph_dct_imagehash(file, hash);
+    return Number::New(hash);
+}
 
 void RegisterModule(Handle<Object> target) {
   NODE_SET_METHOD(target, "imagehash", ImageHash);
@@ -75,6 +84,5 @@ void RegisterModule(Handle<Object> target) {
   NODE_SET_METHOD(target,"hammingDistance",HammingDistance);
   NODE_SET_METHOD(target, "oldHash", oldHash);
 }
-
 
 NODE_MODULE(pHash, RegisterModule);

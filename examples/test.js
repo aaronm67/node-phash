@@ -1,6 +1,6 @@
 var pHash = require('../index');
 
-console.log('oldHashA: \t' + pHash.getOldImageHash('a.jpg'));
+console.log('oldHashA: \t' + pHash.getOldHash('a.jpg'));
 
 var hashA = pHash.getImageHash("a.jpg");
 console.log("HashA: \t\t" + hashA);
