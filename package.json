@@ -8,7 +8,9 @@
     "url" : "https://github.com/aaronm67/node-phash.git"
   },
   "devDependencies": {
-    "node-gyp": "*"
+    "node-gyp": "*",
+    "should": "1.0.0",
+    "mocha": "1.3.0"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -16,6 +18,12 @@
   "script": {
     "preinstall": "node-gyp configure build",
     "preuninstall": "rm -rf build/*"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --globals lw --recursive ./test -t 10000"
   },
   "keywords": ["pHash", "phash", "libpHash", "native", "binding", "addon"],
   "author": "Aaron Marasco <agm257@mail.missouri.edu>",
