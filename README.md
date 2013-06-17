@@ -6,7 +6,13 @@
 
 ## Installation
 
-Install [CImg](http://cimg.sourceforge.net/), [pHash](http://www.phash.org/), [ImageMagicK](http://www.imagemagick.org/) packages first.
+node-phash depends on  [CImg](http://cimg.sourceforge.net/), [pHash](http://www.phash.org/), [ImageMagicK](http://www.imagemagick.org/).
+
+To install these packages in Ubuntu:
+
+    sudo apt-get install cimg-dev libphash0-dev
+
+Then, install using npm:
 
     $ npm install phash
 
