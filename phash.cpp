@@ -70,7 +70,6 @@ void HashAfter(uv_work_t* req, int status) {
     delete request;
 }
 
-
 Handle<Value> ImageHashAsync(const Arguments& args) {
     if (args.Length() < 2 || !args[1]->IsFunction()) {
         // no callback defined
