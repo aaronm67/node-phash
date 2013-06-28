@@ -23,7 +23,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha --globals lw --recursive ./test -t 10000"
+    "test": "node-gyp configure build && mocha"
   },
   "keywords": ["pHash", "phash", "libpHash", "native", "binding", "addon"],
   "author": "Aaron Marasco <agm257@mail.missouri.edu>",

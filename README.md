@@ -14,7 +14,7 @@ node-phash depends on  [CImg](http://cimg.sourceforge.net/), [pHash](http://www.
 
 On Ubuntu:
 
-    sudo apt-get install cimg-dev libphash0-dev
+    sudo apt-get install cimg-dev libphash0-dev libmagickcore-dev
 
 On OSX:
 
