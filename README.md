@@ -1,14 +1,18 @@
 # node-phash
 
   [pHash](http://www.phash.org/) bindings for node.js.
-  
+
+  Phash is a library that will create a "perceptual hash" of media files, so similar files will return similar hashes. Typically to compare, 
+  a simple [Hamming distance](http://en.wikipedia.org/wiki/Hamming_distance) between the two hashes will be a good indicator of how similar two
+  images are.
+
   Current version supports only image hashing. (no video & audio hashing)
 
 ## Installation
 
 node-phash depends on  [CImg](http://cimg.sourceforge.net/), [pHash](http://www.phash.org/), [ImageMagicK](http://www.imagemagick.org/).
 
-To install these packages in Ubuntu:
+On Ubuntu:
 
     sudo apt-get install cimg-dev libphash0-dev
 
@@ -20,21 +24,21 @@ Then, install using npm:
 
     $ npm install phash
 
-## Example
+## Usage
+
 ```js
 var pHash = require("phash");
 
-var hashA = pHash.getImageHash("a.jpg");
-var hashB = pHash.getImageHash("b.png");
-var hashC = pHash.getImageHash("c.png");
+pHash.imageHash("file.jpg", function(err, hash) {
+    if (err) {
+        throw err;
+    }
 
+    // hash is the pHash of file.jpg
+});
+
+var hashA = pHash.imageHashSync("a.jpg");
+var hashB = pHash.imageHashSync("b.png");
 var hammingAB = pHash.hammingDistance(hashA,hashB);
-var hammingAC = pHash.hammingDistance(hashA,hashC);
-
-console.log("HashA: " + hashA);
-console.log("HashB: " + hashB);
-console.log("HashC: " + hashC);
-
 console.log("Hamming Distance A -> B: " + hammingAB);
-console.log("Hamming Distance A -> C: " + hammingAC);
 ```
