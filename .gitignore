@@ -6,7 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
-
+/demo
 pids
 logs
 results

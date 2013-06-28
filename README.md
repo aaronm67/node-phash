@@ -12,6 +12,10 @@ To install these packages in Ubuntu:
 
     sudo apt-get install cimg-dev libphash0-dev
 
+On OSX:
+
+    brew install phash imagemagick
+
 Then, install using npm:
 
     $ npm install phash
