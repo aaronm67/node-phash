@@ -7,6 +7,8 @@
   media files are.
 
   Current version supports only image hashing. (no video & audio hashing)
+  
+  [![Build Status](https://travis-ci.org/aaronm67/node-phash.png?branch=master)](https://travis-ci.org/aaronm67/node-phash)
 
 ## Installation
 
