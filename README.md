@@ -1,12 +1,14 @@
 # node-phash
 
-  [pHash](http://www.phash.org/) bindings for node.js.
+  node-pash is [pHash](http://www.phash.org/) bindings for node.js.
 
-  Phash is a library that will create a "perceptual hash" of media files, so similar files will return similar hashes. Typically to compare, 
-  a simple [Hamming distance](http://en.wikipedia.org/wiki/Hamming_distance) between the two hashes will be a good indicator of how similar two
-  images are.
+  Phash is a library that will create a "perceptual hash" of media files, so similar files will return similar hashes. Typically to compare hashes, 
+  a simple [Hamming distance](http://en.wikipedia.org/wiki/Hamming_distance) between the two hashes is a good indicator of how similar two
+  media files are.
 
   Current version supports only image hashing. (no video & audio hashing)
+  
+  [![Build Status](https://travis-ci.org/aaronm67/node-phash.png?branch=master)](https://travis-ci.org/aaronm67/node-phash)
 
 ## Installation
 
@@ -14,7 +16,7 @@ node-phash depends on  [CImg](http://cimg.sourceforge.net/), [pHash](http://www.
 
 On Ubuntu:
 
-    sudo apt-get install cimg-dev libphash0-dev
+    sudo apt-get install cimg-dev libphash0-dev libmagickcore-dev
 
 On OSX:
 
@@ -23,6 +25,19 @@ On OSX:
 Then, install using npm:
 
     $ npm install phash
+
+## Functions
+
+```js
+
+// asynchronous hash
+imageHash(filename, function(err, hash));
+
+// synchronous hash
+var hash = imageHashSync(filename);
+
+hammingDistance(hash1, hash2);
+```
 
 ## Usage
 
