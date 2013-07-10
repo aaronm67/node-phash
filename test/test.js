@@ -24,6 +24,22 @@ describe("pHash", function() {
         })
     });
 
+    // https://github.com/aaronm67/node-phash/issues/8
+    describe("invalid file test", function() {
+        it("should fail", function() {
+            var hash = pHash.imageHashSync("fake/path/here");
+            hash.should.equal("0");
+        });
+
+        it("should fail", function(done) {
+            pHash.imageHash("fake/path/here", function(err, hash) {
+                assert(err);
+                done();
+            });
+        });
+
+    })
+
     describe("async test", function() {
         var test = examples[0];
         examples.forEach(function(i) {

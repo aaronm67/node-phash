@@ -2,6 +2,7 @@
 #include <node.h>
 #include <pHash.h>
 #include <sstream>
+#include <fstream>
 #include <cstdio>
 using namespace node;
 using namespace v8;
@@ -27,11 +28,21 @@ T StringToNumber ( const string &Text ) {
     return ss >> result ? result : 0;
 }
 
-const char* ToCString(const String::Utf8Value& value) {
+const char* toCString(const String::Utf8Value& value) {
     return *value ? *value : "<string conversion failed>";
 }
 
+bool fileExists(const char* filename) {
+    ifstream file(filename);
+    return file;
+}
+
 const string getHash(const char* file) {
+    // prevent segfault on an empty file, see https://github.com/aaronm67/node-phash/issues/8
+    if (!fileExists(file)) {
+        return "0";
+    }
+
     string ret;
     try {
         ulong64 hash = 0;
@@ -70,7 +81,6 @@ void HashAfter(uv_work_t* req, int status) {
     delete request;
 }
 
-
 Handle<Value> ImageHashAsync(const Arguments& args) {
     if (args.Length() < 2 || !args[1]->IsFunction()) {
         // no callback defined
@@ -100,8 +110,8 @@ Handle<Value> HammingDistance(const Arguments& args) {
 
     String::Utf8Value arg0(args[0]);
     String::Utf8Value arg1(args[1]);
-    string aString = string(ToCString(arg0));
-    string bString = string(ToCString(arg1));
+    string aString = string(toCString(arg0));
+    string bString = string(toCString(arg1));
     
     ulong64 hasha = StringToNumber<ulong64>(aString);
     ulong64 hashb = StringToNumber<ulong64>(bString);
@@ -118,7 +128,7 @@ Handle<Value> HammingDistance(const Arguments& args) {
 */
 Handle<Value> oldHash(const Arguments& args) {
     String::Utf8Value str(args[0]);
-    const char* file = ToCString(str);
+    const char* file = toCString(str);
     ulong64 hash = 0;
     ph_dct_imagehash(file, hash);
     return Number::New(hash);
