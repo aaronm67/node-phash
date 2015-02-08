@@ -24,7 +24,7 @@ D Grant Starkweather - dstarkweather@phash.org
 
 #include "pHash.h"
 #ifndef _WIN32
-#include "config.h"
+//#include "config.h"
 #else
 #define snprintf _snprintf
 #endif

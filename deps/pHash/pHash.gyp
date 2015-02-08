@@ -1,4 +1,5 @@
 {
+  'includes': [ '../common.gyp' ],
   'targets': [
     {
       'target_name': 'phash',
@@ -13,11 +14,22 @@
         '../libpng',
       ],
       'sources': [
-        './dirent.c',
         './ph_fft.c',
         './pHash.cpp',
         './phcomplex.c',
       ],
+      'conditions': [
+        ['OS=="win"',
+          {
+            'include_dirs': [
+              './win32/',
+            ],
+            'sources': [
+             './win32/dirent.c',
+            ],
+          },
+        ],
+      ],
     },
-  ]
+  ],
 }

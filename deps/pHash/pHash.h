@@ -73,15 +73,15 @@ using namespace std;
 
 #define ROUNDING_FACTOR(x) (((x) >= 0) ? 0.5 : -0.5) 
 
-#ifndef _WIN32
-typedef unsigned _uint64 ulong64;
-typedef signed _int64 long64;
-#else
+// #ifndef _WIN32
+// typedef unsigned _uint64 ulong64;
+// typedef signed _int64 long64;
+// #else
 typedef unsigned long long ulong64;
 typedef signed long long long64;
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
-#endif
+// #endif
 
 #ifdef __cplusplus
 extern "C" {

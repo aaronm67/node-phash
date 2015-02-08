@@ -1,4 +1,5 @@
 {
+  'includes': [ 'deps/common.gyp' ],
   'targets': [
     {
       'target_name': 'pHashBinding',

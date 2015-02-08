@@ -1,4 +1,5 @@
 {
+  'includes': [ '../common.gyp' ],
   'targets': [
     {
       'target_name': 'zlib',
