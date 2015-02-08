@@ -18,14 +18,14 @@
         'deps/libpng/libpng.gyp:libpng',
         'deps/pHash/pHash.gyp:phash',
       ],
-      'cflags!': [ '-fno-exceptions' ],
-      'cflags_cc!': [ '-fno-exceptions' ],
       'conditions': [
-        ['OS=="mac"', {
-          'xcode_settings': {
-            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
-          }
-        }]
+        ['OS=="win"',
+          {
+            'include_dirs': [
+              'deps/pHash/win32/',
+            ],
+          },
+        ],
       ],
     }
   ]
