@@ -12,17 +12,7 @@
 
 ## Installation
 
-node-phash depends on  [CImg](http://cimg.sourceforge.net/), [pHash](http://www.phash.org/), [ImageMagicK](http://www.imagemagick.org/).
-
-On Ubuntu:
-
-    sudo apt-get install cimg-dev libphash0-dev libmagickcore-dev
-
-On OSX:
-
-    brew install phash imagemagick
-
-Then, install using npm:
+Install using npm:
 
     $ npm install phash
 

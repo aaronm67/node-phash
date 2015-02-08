@@ -1,24 +1,25 @@
 var assert = require("assert");
-var pHash = require('../index');
+var pHash = require('../lib/phash');
 require("should");
 
 var examples = [
-    { path: "./examples/a.jpg", hash: "2816561582497829945" },
-    { path: "./examples/a.jpg", hash: "2816561582497829945" },
-    { path: "./examples/c.png", hash: "15433968795834791622" },
-    { path: "./examples/d.jpg", hash: "12040987020241900649" }
+    { path: __dirname + "/data/a.jpg", hash: "2816561582497829945" },
+    { path: __dirname + "/data/a.jpg", hash: "2816561582497829945" },
+    { path: __dirname + "/data/c.png", hash: "15433968795834791622" },
+    { path: __dirname + "/data/d.jpg", hash: "12040987020241900649" }
 ];
+
 describe("pHash", function() {
     describe("sync test", function() {
 		examples.forEach(function(i) {
-			it(i.path, function() {
-				var hash = pHash.imageHashSync(i.path);
+            it(i.path, function() {
+                var hash = pHash.imageHashSync(i.path);
                 assert.equal(i.hash, hash);
 			});
         });
 
         it("should fail", function() {
-            var hashF = pHash.imageHashSync("./examples/f.png");
+            var hashF = pHash.imageHashSync(__dirname + "/data/f.png");
             hashF.should.equal('0');
         });
     });
@@ -55,7 +56,7 @@ describe("pHash", function() {
         });
 
         it("should fail", function(done) { 
-            pHash.imageHash("./examples/f.png", function(err, hash) {
+            pHash.imageHash(__dirname + "/data/f.png", function(err, hash) {
                 assert(err);
                 done();
             });
@@ -77,7 +78,7 @@ describe("pHash", function() {
         });
 
         it("should fail", function() {
-            var hashF = pHash.getImageHash("./examples/f.png");
+            var hashF = pHash.getImageHash(__dirname + "/data/f.png");
             hashF.should.equal('0');
         });
     });

@@ -1,9 +1,10 @@
 #include <v8.h>
 #include <node.h>
-#include <pHash.h>
+#include "pHash.h"
 #include <sstream>
 #include <fstream>
 #include <cstdio>
+
 using namespace node;
 using namespace v8;
 
@@ -34,7 +35,7 @@ const char* toCString(const String::Utf8Value& value) {
 
 bool fileExists(const char* filename) {
     ifstream file(filename);
-    return file;
+    return file.good();
 }
 
 const string getHash(const char* file) {
@@ -144,4 +145,4 @@ void RegisterModule(Handle<Object> target) {
   NODE_SET_METHOD(target, "imagehash", ImageHashSync);
 }
 
-NODE_MODULE(pHash, RegisterModule);
+NODE_MODULE(pHashBinding, RegisterModule);

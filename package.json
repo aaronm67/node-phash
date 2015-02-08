@@ -2,7 +2,7 @@
   "name": "phash",
   "version": "0.0.5",
   "description": "Bindings for node.js to pHash",
-  "main": "index",
+  "main": "src/phash.js",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/aaronm67/node-phash.git"
@@ -17,7 +17,7 @@
   },
   "script": {
     "preinstall": "node-gyp configure build",
-    "preuninstall": "rm -rf build/*"
+    "preuninstall": "node-gyp clean"
   },
   "directories": {
     "test": "tests"
