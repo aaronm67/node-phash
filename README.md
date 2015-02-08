@@ -1,51 +1,57 @@
-# node-phash
+# pHash [![NPM version](https://badge.fury.io/js/phash.png)](http://badge.fury.io/js/phash) [![Build Status](https://travis-ci.org/aaronm67/node-phash.png?branch=master)](https://travis-ci.org/aaronm67/node-phash)
 
-  node-pash is [pHash](http://www.phash.org/) bindings for node.js.
+[pHash](http://www.phash.org/) bindings for [Node.js](http://nodejs.org/).
 
-  Phash is a library that will create a "perceptual hash" of media files, so similar files will return similar hashes. Typically to compare hashes, 
-  a simple [Hamming distance](http://en.wikipedia.org/wiki/Hamming_distance) between the two hashes is a good indicator of how similar two
-  media files are.
+A pHash is a "perceptual hash" of a multimedia file derived from various features from its content. This can be useful to compare similar files, create database indices and so on.
 
-  Current version supports only image hashing. (no video & audio hashing)
-  
-  [![Build Status](https://travis-ci.org/aaronm67/node-phash.png?branch=master)](https://travis-ci.org/aaronm67/node-phash)
+Note: Currently supports only images - no video or audio.
 
 ## Installation
 
-Install using npm:
-
     $ npm install phash
-
-## Functions
-
-```js
-
-// asynchronous hash
-imageHash(filename, function(err, hash));
-
-// synchronous hash
-var hash = imageHashSync(filename);
-
-hammingDistance(hash1, hash2);
-```
 
 ## Usage
 
-```js
+```javascript
 var pHash = require("phash");
 
 pHash.imageHash("file.jpg", function(err, hash) {
     if (err) {
-        throw err;
+        console.error(err);
     }
-
-    // hash is the pHash of file.jpg
+    console.log("pHash: " + hash);
 });
 
 var hashA = pHash.imageHashSync("a.jpg");
 var hashB = pHash.imageHashSync("b.png");
-var hammingAB = pHash.hammingDistance(hashA,hashB);
+var hammingAB = pHash.hammingDistance(hashA, hashB);
 console.log("Hamming Distance A -> B: " + hammingAB);
+```
+
+## API
+
+### pHash#imageHash
+
+Computes a pHash asynchronously.
+
+```javascript
+imageHash(filename, function(err, hash));
+```
+
+### pHash#imageHashSync
+
+Computes a pHash.
+
+```javascript
+var hash = imageHashSync(filename);
+```
+
+### pHash#hammingDistance
+
+Computes the [Hamming distance](http://en.wikipedia.org/wiki/Hamming_distance) between the two pHashes.
+
+```
+hammingDistance(hashA, hashB);
 ```
 
 ## License

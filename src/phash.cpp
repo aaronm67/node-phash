@@ -70,11 +70,10 @@ const string getHash(const char* file) {
     try {
         ulong64 hash = 0;
         ph_dct_imagehash(file, hash);
-        return NumberToString(hash);   
+        return NumberToString(hash);
     }
-    catch(...) {
-        // something went wrong with hashing
-        // probably a CImg or ImageMagick IO Problem
+    catch (...) {
+        // something went wrong; probably a problem with CImg.
         return "0";
     }
 }
@@ -91,7 +90,7 @@ void HashAfter(uv_work_t* req, int status) {
     Handle<Value> argv[2];
 
     if (request->hash == "0") {
-        argv[0] = String::New("Error getting image hash");
+        argv[0] = v8::Exception::Error(String::New("Error getting image hash"));
     }
     else {
         argv[0] = Undefined();
@@ -158,13 +157,13 @@ Handle<Value> oldHash(const Arguments& args) {
 }
 
 void RegisterModule(Handle<Object> target) {
-  NODE_SET_METHOD(target, "imageHashSync", ImageHashSync);
-  NODE_SET_METHOD(target, "imageHash", ImageHashAsync);
-  NODE_SET_METHOD(target, "hammingDistance", HammingDistance);
- 
-  // methods below are deprecated
-  NODE_SET_METHOD(target, "oldHash", oldHash);
-  NODE_SET_METHOD(target, "imagehash", ImageHashSync);
+    NODE_SET_METHOD(target, "imageHashSync", ImageHashSync);
+    NODE_SET_METHOD(target, "imageHash", ImageHashAsync);
+    NODE_SET_METHOD(target, "hammingDistance", HammingDistance);
+
+    // methods below are deprecated
+    NODE_SET_METHOD(target, "oldHash", oldHash);
+    NODE_SET_METHOD(target, "imagehash", ImageHashSync);
 }
 
 NODE_MODULE(pHashBinding, RegisterModule);
