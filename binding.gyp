@@ -1,20 +1,35 @@
 {
+  'includes': [ 'deps/common.gyp' ],
   'targets': [
     {
-      'target_name': 'pHash',
-      'sources': [ 'phash.cpp' ],
-      'cflags!': [ '-fno-exceptions' ],
-      'cflags_cc!': [ '-fno-exceptions' ],
-      'conditions': [
-        ['OS=="mac"', {
-          'xcode_settings': {
-            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
-          }
-        }]
+      'target_name': 'pHashBinding',
+      'defines': [
+        'HAVE_IMAGE_HASH',
+        'cimg_verbosity=0',
+        'cimg_use_png',
+        'cimg_use_jpeg',
       ],
-      'link_settings': {
-        'libraries': ['-lpHash']
-      }
+      'include_dirs': [
+        'deps/pHash',
+        'deps/libpng',
+        'deps/libjpeg',
+       ],
+      'sources': [ 'src/phash.cpp' ],
+      'dependencies': [
+        'deps/zlib/zlib.gyp:zlib',
+        'deps/libpng/libpng.gyp:libpng',
+        'deps/libjpeg/libjpeg.gyp:libjpeg',
+        'deps/pHash/pHash.gyp:phash',
+      ],
+      'conditions': [
+        ['OS=="win"',
+          {
+            'include_dirs': [
+              'deps/pHash/win32/',
+            ],
+          },
+        ],
+      ],
     }
   ]
 }

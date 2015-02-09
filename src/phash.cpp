@@ -1,9 +1,32 @@
+/*
+ *  Copyright (c) 2013 Aaron Marasco. All rights reserved.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 #include <v8.h>
 #include <node.h>
-#include <pHash.h>
+#include "pHash.h"
 #include <sstream>
 #include <fstream>
 #include <cstdio>
+
 using namespace node;
 using namespace v8;
 
@@ -34,7 +57,7 @@ const char* toCString(const String::Utf8Value& value) {
 
 bool fileExists(const char* filename) {
     ifstream file(filename);
-    return file;
+    return file.good();
 }
 
 const string getHash(const char* file) {
@@ -47,11 +70,10 @@ const string getHash(const char* file) {
     try {
         ulong64 hash = 0;
         ph_dct_imagehash(file, hash);
-        return NumberToString(hash);   
+        return NumberToString(hash);
     }
-    catch(...) {
-        // something went wrong with hashing
-        // probably a CImg or ImageMagick IO Problem
+    catch (...) {
+        // something went wrong; probably a problem with CImg.
         return "0";
     }
 }
@@ -68,7 +90,7 @@ void HashAfter(uv_work_t* req, int status) {
     Handle<Value> argv[2];
 
     if (request->hash == "0") {
-        argv[0] = String::New("Error getting image hash");
+        argv[0] = v8::Exception::Error(String::New("Error getting image hash"));
     }
     else {
         argv[0] = Undefined();
@@ -135,13 +157,13 @@ Handle<Value> oldHash(const Arguments& args) {
 }
 
 void RegisterModule(Handle<Object> target) {
-  NODE_SET_METHOD(target, "imageHashSync", ImageHashSync);
-  NODE_SET_METHOD(target, "imageHash", ImageHashAsync);
-  NODE_SET_METHOD(target, "hammingDistance", HammingDistance);
- 
-  // methods below are deprecated
-  NODE_SET_METHOD(target, "oldHash", oldHash);
-  NODE_SET_METHOD(target, "imagehash", ImageHashSync);
+    NODE_SET_METHOD(target, "imageHashSync", ImageHashSync);
+    NODE_SET_METHOD(target, "imageHash", ImageHashAsync);
+    NODE_SET_METHOD(target, "hammingDistance", HammingDistance);
+
+    // methods below are deprecated
+    NODE_SET_METHOD(target, "oldHash", oldHash);
+    NODE_SET_METHOD(target, "imagehash", ImageHashSync);
 }
 
-NODE_MODULE(pHash, RegisterModule);
+NODE_MODULE(pHashBinding, RegisterModule);
