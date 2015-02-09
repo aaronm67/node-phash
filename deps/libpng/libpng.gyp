@@ -4,8 +4,6 @@
     {
       'target_name': 'libpng',
       'type': 'static_library',
-      'defines': [
-      ],
       'include_dirs': [
         '.',
         '../zlib'

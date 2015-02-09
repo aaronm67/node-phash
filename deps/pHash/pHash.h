@@ -48,10 +48,12 @@
 
 
 #if defined(HAVE_IMAGE_HASH) || defined(HAVE_VIDEO_HASH)
+#define XMD_H
 #define cimg_debug 0
 #define cimg_display 0
 #include "CImg.h"
 using namespace cimg_library;
+#undef XMD_H
 #endif
 
 #ifdef HAVE_PTHREAD
