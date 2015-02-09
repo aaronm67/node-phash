@@ -58,3 +58,5 @@ hammingDistance(hashA, hashB);
 
 Licensed under the incredibly [permissive](http://en.wikipedia.org/wiki/Permissive_free_software_licence) [MIT License](http://creativecommons.org/licenses/MIT/). Copyright &copy; 2013 Aaron Marasco. <br>
 Dependencies may be licensed diffrently.
+
+NOTE: The Node bindings for pHash provided are are MIT licensed and may be used and modified freely. You must also comply with the terms of whichever [pHash License](http://www.phash.org/licensing/) you are using.
