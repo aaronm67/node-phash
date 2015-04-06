@@ -2,7 +2,7 @@
   "name": "phash",
   "version": "0.0.5",
   "description": "Bindings for node.js to pHash",
-  "main": "src/phash.js",
+  "main": "lib/phash.js",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/aaronm67/node-phash.git"
