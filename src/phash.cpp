@@ -26,9 +26,12 @@
 #include <sstream>
 #include <fstream>
 #include <cstdio>
+#include <uv.h>
+#include <nan.h>
 
 using namespace node;
 using namespace v8;
+using namespace v8::internal;
 
 struct PhashRequest {
     string file;
@@ -90,13 +93,13 @@ void HashAfter(uv_work_t* req, int status) {
     Handle<Value> argv[2];
 
     if (request->hash == "0") {
-        argv[0] = v8::Exception::Error(String::New("Error getting image hash"));
+        argv[0] = v8::Exception::Error(NanNew<String>("Error getting image hash"));
     }
     else {
         argv[0] = Undefined();
     }
 
-    argv[1] = String::New(request->hash.c_str());
+    argv[1] = NanNew<String>(request->hash.c_str());
     request->callback->Call(Context::GetCurrent()->Global(), 2, argv);
     request->callback.Dispose();
 
@@ -106,13 +109,15 @@ void HashAfter(uv_work_t* req, int status) {
 Handle<Value> ImageHashAsync(const Arguments& args) {
     if (args.Length() < 2 || !args[1]->IsFunction()) {
         // no callback defined
-        return ThrowException(Exception::Error(String::New("Callback is required and must be an Function.")));
+        return ThrowException(Exception::Error(NanNew<string>("Callback is required and must be an Function.")));
     }
 
     String::Utf8Value str(args[0]);
     Handle<Function> cb = Handle<Function>::Cast(args[1]);
     
     PhashRequest* request = new PhashRequest;
+
+    NanAssignPersistent(request->callback, cb.As<Function>());
     request->callback = Persistent<Function>::New(cb);
     request->file = string(*str);
     request->request.data = request;
@@ -124,7 +129,7 @@ Handle<Value> ImageHashSync(const Arguments& args) {
     HandleScope scope;
     String::Utf8Value str(args[0]);
     string result = getHash(*str);
-    return scope.Close(String::New(result.c_str()));
+    return scope.Close(NanNew<String>(result.c_str()));
 }
 
 Handle<Value> HammingDistance(const Arguments& args) {

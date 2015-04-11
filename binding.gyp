@@ -13,6 +13,7 @@
         'deps/pHash',
         'deps/libpng',
         'deps/libjpeg',
+        "<!(node -e \"require('nan')\")"
        ],
       'sources': [ 'src/phash.cpp' ],
       'dependencies': [
