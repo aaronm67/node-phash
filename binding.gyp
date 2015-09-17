@@ -3,6 +3,8 @@
   'targets': [
     {
       'target_name': 'pHashBinding',
+      'cflags!': [ '-fno-exceptions' ],
+      'cflags_cc!': [ '-fno-exceptions' ],
       'defines': [
         'HAVE_IMAGE_HASH',
         'cimg_verbosity=0',
