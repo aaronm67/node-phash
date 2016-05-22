@@ -11,11 +11,11 @@ var examples = [
 
 describe("pHash", function() {
     describe("sync test", function() {
-		examples.forEach(function(i) {
+        examples.forEach(function(i) {
             it(i.path, function() {
                 var hash = pHash.imageHashSync(i.path);
                 assert.equal(i.hash, hash);
-			});
+            });
         });
 
         it("should fail", function() {
@@ -33,6 +33,7 @@ describe("pHash", function() {
 
         it("should fail", function(done) {
             pHash.imageHash("fake/path/here", function(err, hash) {
+                assert.equal(err.message, "Error getting image hash");
                 assert(err);
                 done();
             });
@@ -57,6 +58,7 @@ describe("pHash", function() {
 
         it("should fail", function(done) { 
             pHash.imageHash(__dirname + "/data/f.png", function(err, hash) {
+                assert.equal(err.message, "Error getting image hash");
                 assert(err);
                 done();
             });
@@ -66,7 +68,13 @@ describe("pHash", function() {
             assert.throws(function() {
                 pHash.imageHash("not enough arguments");
             });
-        })
+        });
+
+        it("should throw", function() {
+            assert.throws(function() {
+                pHash.imageHash("not enough arguments", 123);
+            });
+        });
     });
 
     describe("legacy test", function() {

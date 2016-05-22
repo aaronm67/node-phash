@@ -20,8 +20,10 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 #include <v8.h>
 #include <node.h>
+#include <nan.h>
 #include "pHash.h"
 #include <sstream>
 #include <fstream>
@@ -29,13 +31,6 @@
 
 using namespace node;
 using namespace v8;
-
-struct PhashRequest {
-    string file;
-    string hash;
-    uv_work_t request;
-    Persistent<Function> callback;
-};
 
 template <typename T>
 string NumberToString ( T Number ) {
@@ -78,69 +73,70 @@ const string getHash(const char* file) {
     }
 }
 
-void HashWorker(uv_work_t* req) {
-    PhashRequest* request = static_cast<PhashRequest*>(req->data);
-    request->hash = getHash(request->file.c_str());
-}
+class PhashRequest : public Nan::AsyncWorker {
+  public:
+    PhashRequest(Nan::Callback *callback, string file)
+      : AsyncWorker(callback), file(file) {}
+    ~PhashRequest() {}
 
-void HashAfter(uv_work_t* req, int status) {
-    HandleScope scope;
-    PhashRequest* request = static_cast<PhashRequest*>(req->data);
-
-    Handle<Value> argv[2];
-
-    if (request->hash == "0") {
-        argv[0] = v8::Exception::Error(String::New("Error getting image hash"));
-    }
-    else {
-        argv[0] = Undefined();
+    void Execute () {
+        hash = getHash(file.c_str());
     }
 
-    argv[1] = String::New(request->hash.c_str());
-    request->callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    request->callback.Dispose();
+    void HandleOKCallback () {
+        Nan::HandleScope scope;
 
-    delete request;
-}
+        Local<Value> argv[] = {
+            Nan::Undefined(),
+            Nan::New(hash.c_str()).ToLocalChecked()
+        };
 
-Handle<Value> ImageHashAsync(const Arguments& args) {
-    if (args.Length() < 2 || !args[1]->IsFunction()) {
-        // no callback defined
-        return ThrowException(Exception::Error(String::New("Callback is required and must be an Function.")));
+        if (hash == "0") {
+            argv[0] = Nan::Error("Error getting image hash");
+        }
+
+        callback->Call(2, argv);
     }
 
-    String::Utf8Value str(args[0]);
-    Handle<Function> cb = Handle<Function>::Cast(args[1]);
-    
-    PhashRequest* request = new PhashRequest;
-    request->callback = Persistent<Function>::New(cb);
-    request->file = string(*str);
-    request->request.data = request;
-    uv_queue_work(uv_default_loop(), &request->request, HashWorker, HashAfter);
-    return Undefined();
+    string file;
+    string hash;
+};
+
+
+NAN_METHOD(ImageHashAsync) {
+  if (info.Length() < 2 || !info[1]->IsFunction()) {
+    Nan::ThrowError("Callback is required and must be an Function.");
+  }
+
+  String::Utf8Value file_arg(info[0]);
+  string file = string(toCString(file_arg));
+
+  Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
+
+  Nan::AsyncQueueWorker(new PhashRequest(callback, file));
 }
 
-Handle<Value> ImageHashSync(const Arguments& args) {
-    HandleScope scope;
+void ImageHashSync(const Nan::FunctionCallbackInfo<v8::Value>& args) {
+    Nan::HandleScope scope;
     String::Utf8Value str(args[0]);
     string result = getHash(*str);
-    return scope.Close(String::New(result.c_str()));
+    args.GetReturnValue().Set(Nan::New(result.c_str()).ToLocalChecked());
 }
 
-Handle<Value> HammingDistance(const Arguments& args) {
-    HandleScope scope;
+void HammingDistance(const Nan::FunctionCallbackInfo<v8::Value>& args) {
+    Nan::HandleScope scope;
 
     String::Utf8Value arg0(args[0]);
     String::Utf8Value arg1(args[1]);
     string aString = string(toCString(arg0));
     string bString = string(toCString(arg1));
-    
+
     ulong64 hasha = StringToNumber<ulong64>(aString);
     ulong64 hashb = StringToNumber<ulong64>(bString);
-    
+
     int distance = ph_hamming_distance(hasha,hashb);
-    
-    return scope.Close(Number::New(distance));
+
+    args.GetReturnValue().Set(Nan::New<v8::Number>(distance));
 }
 
 /*
@@ -148,22 +144,33 @@ Handle<Value> HammingDistance(const Arguments& args) {
     V8 only supports 32 bit integers, so hashes must be returned as strings.
     This is a legacy version that returns a 32 bit integer of the hash.
 */
-Handle<Value> oldHash(const Arguments& args) {
+void oldHash(const Nan::FunctionCallbackInfo<v8::Value>& args) {
+    Nan::HandleScope scope;
+
     String::Utf8Value str(args[0]);
     const char* file = toCString(str);
     ulong64 hash = 0;
     ph_dct_imagehash(file, hash);
-    return Number::New(hash);
+    args.GetReturnValue().Set(Nan::New<v8::Number>(hash));
 }
 
 void RegisterModule(Handle<Object> target) {
-    NODE_SET_METHOD(target, "imageHashSync", ImageHashSync);
-    NODE_SET_METHOD(target, "imageHash", ImageHashAsync);
-    NODE_SET_METHOD(target, "hammingDistance", HammingDistance);
+    Nan::Set(target, Nan::New<v8::String>("imageHashSync").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ImageHashSync)).ToLocalChecked());
+
+    Nan::Set(target, Nan::New<v8::String>("imageHash").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ImageHashAsync)).ToLocalChecked());
+
+    Nan::Set(target, Nan::New<v8::String>("hammingDistance").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(HammingDistance)).ToLocalChecked());
+
 
     // methods below are deprecated
-    NODE_SET_METHOD(target, "oldHash", oldHash);
-    NODE_SET_METHOD(target, "imagehash", ImageHashSync);
+    Nan::Set(target, Nan::New<v8::String>("imagehash").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ImageHashAsync)).ToLocalChecked());
+
+    Nan::Set(target, Nan::New<v8::String>("oldHash").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(oldHash)).ToLocalChecked());
 }
 
 NODE_MODULE(pHashBinding, RegisterModule);

@@ -4,8 +4,8 @@
   "description": "Bindings for node.js to pHash",
   "main": "src/phash.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/aaronm67/node-phash.git"
+    "type": "git",
+    "url": "https://github.com/aaronm67/node-phash.git"
   },
   "devDependencies": {
     "node-gyp": "*",
@@ -25,11 +25,21 @@
   "scripts": {
     "test": "node-gyp configure build && mocha"
   },
-  "keywords": ["pHash", "phash", "libpHash", "native", "binding", "addon"],
+  "keywords": [
+    "pHash",
+    "phash",
+    "libpHash",
+    "native",
+    "binding",
+    "addon"
+  ],
   "author": "Aaron Marasco <agm257@mail.missouri.edu>",
   "contributors": [
     "Aaron Marasco <agm257@mail.missouri.edu>",
     "Taeho Kim <xissysnd@gmail.com>",
     "Jeremy Dowell <jeremy@codevinsky.com>"
-  ]
+  ],
+  "dependencies": {
+    "nan": "^2.3.3"
+  }
 }
