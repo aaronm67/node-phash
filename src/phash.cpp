@@ -155,22 +155,13 @@ void oldHash(const Nan::FunctionCallbackInfo<v8::Value>& args) {
 }
 
 void RegisterModule(Handle<Object> target) {
-    Nan::Set(target, Nan::New<v8::String>("imageHashSync").ToLocalChecked(),
-        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ImageHashSync)).ToLocalChecked());
-
-    Nan::Set(target, Nan::New<v8::String>("imageHash").ToLocalChecked(),
-        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ImageHashAsync)).ToLocalChecked());
-
-    Nan::Set(target, Nan::New<v8::String>("hammingDistance").ToLocalChecked(),
-        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(HammingDistance)).ToLocalChecked());
-
+    Nan::SetMethod(target, "imageHashSync", ImageHashSync);
+    Nan::SetMethod(target, "imageHash", ImageHashAsync);
+    Nan::SetMethod(target, "hammingDistance", HammingDistance);
 
     // methods below are deprecated
-    Nan::Set(target, Nan::New<v8::String>("imagehash").ToLocalChecked(),
-        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ImageHashAsync)).ToLocalChecked());
-
-    Nan::Set(target, Nan::New<v8::String>("oldHash").ToLocalChecked(),
-        Nan::GetFunction(Nan::New<v8::FunctionTemplate>(oldHash)).ToLocalChecked());
+    Nan::SetMethod(target, "imagehash", ImageHashAsync);
+    Nan::SetMethod(target, "oldHash", oldHash);
 }
 
 NODE_MODULE(pHashBinding, RegisterModule);
