@@ -5,3 +5,10 @@ node_js:
 
 before_install:
     - "sudo apt-get install cimg-dev libphash0-dev libmagickcore-dev"
+
+node_js:
+  - "6"
+  - "5"
+  - "4"
+  - "0.12"
+  - "0.10"
