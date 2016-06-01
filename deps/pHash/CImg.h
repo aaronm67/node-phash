@@ -144,13 +144,16 @@
 #endif
 
 // Look for C++11 features
-#if !defined(cimg_use_cpp11) && __cplusplus>201100
-#define cimg_use_cpp11
-#endif
-#ifdef cimg_use_cpp11
-#include <initializer_list>
-#include <utility>
-#endif
+//#if !defined(cimg_use_cpp11) && __cplusplus>201100
+//#define cimg_use_cpp11
+//#endif
+//#ifdef cimg_use_cpp11
+//#include <initializer_list>
+//#include <utility>
+//#endif
+
+#undef cimg_use_cpp11
+#include "CImg.h"
 
 // Configure filename separator.
 //

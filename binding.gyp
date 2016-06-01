@@ -10,6 +10,7 @@
         'cimg_use_jpeg',
       ],
       'include_dirs': [
+        "<!(node -e \"require('nan')\")",
         'deps/pHash',
         'deps/libpng',
         'deps/libjpeg',

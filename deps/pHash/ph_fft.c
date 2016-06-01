@@ -18,40 +18,52 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     Evan Klinger - eklinger@phash.org
-    David Starkweather - dstarkweather@phash.org
+    D Grant Starkweather - dstarkweather@phash.org
 
 */
+
+
+
 #include "ph_fft.h"
 
+complex double polar_to_complex(const double r, const double theta)
+{
+    complex double result;
+    result = r*cos(theta) + r*sin(theta)*I;
 
-void fft_calc(const int N, const double *x, Complexd *X, Complexd *P, const int step, const Complexd *twids){
-    int k;
-    Complexd *S = P + N/2;
+    return result;
+}
+
+void fft_calc(const int N,const double *x,complex double *X,complex double *P,const int step,const complex double *twids)
+{
+    complex double *S = P + N/2;
     if (N == 1){
-		X[0].re = x[0];
-        X[0].im = 0;
-		return;
+	X[0] = x[0];
+	return;
     }
     
     fft_calc(N/2, x,      S,   X,2*step, twids);
-    fft_calc(N/2, x+step, P,   X,2*step, twids);
- 
+    fft_calc(N/2, x+step, P,   X,2*step, twids);	    
+
+    int k;
     for (k=0;k<N/2;k++){
-		P[k] = mult_complex(P[k],twids[k*step]);
-		X[k]     = add_complex(S[k],P[k]);
-		X[k+N/2] = sub_complex(S[k],P[k]);
+	P[k] = P[k]*twids[k*step];
+	X[k]     = S[k] + P[k];
+	X[k+N/2] = S[k] - P[k];
     }
 
 }
 
 
-int fft(const double *x, const int N, Complexd *X){
+int fft(double *x, int N, complex double *X)
+{
 
-    Complexd *twiddle_factors = (Complexd*)malloc(sizeof(Complexd)*(N/2));
-    Complexd *Xt = (Complexd*)malloc(sizeof(Complexd)*N);
+    complex double *twiddle_factors = (complex double*)malloc(sizeof(complex double)*(N/2));
+    complex double *Xt = (complex double*)malloc(sizeof(complex double)*N);
+
     int k;
     for (k=0;k<N/2;k++){
-		twiddle_factors[k] = polar_to_complex(1.0, 2.0*PI*k/N);
+	twiddle_factors[k] = polar_to_complex(1.0, 2.0*PI*k/N);
     }
     fft_calc(N, x, X, Xt, 1, twiddle_factors);
 
