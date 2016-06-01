@@ -1,6 +1,6 @@
 {
   "name": "phash",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Bindings for node.js to pHash",
   "main": "src/phash.js",
   "repository": {
