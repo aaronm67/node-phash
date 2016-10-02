@@ -24,7 +24,7 @@
 #include <v8.h>
 #include <node.h>
 #include <nan.h>
-#include "pHash.h"
+#include "../deps/pHash/pHash.h"
 #include <sstream>
 #include <fstream>
 #include <cstdio>
