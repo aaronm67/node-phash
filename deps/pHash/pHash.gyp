@@ -16,7 +16,6 @@
         '../libjpeg',
       ],
       'sources': [
-        './ph_fft.c',
         './pHash.cpp',
         './phcomplex.c',
       ],
