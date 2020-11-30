@@ -10,8 +10,11 @@
         {
           'xcode_settings': {
             'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
-          }
-        }
+          },
+          'defines': [
+             'HAVE_UNISTD_H',
+          ],
+         },
       ],
       ['OS=="win"',
         {

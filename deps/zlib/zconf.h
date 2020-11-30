@@ -444,9 +444,6 @@ typedef uLong FAR uLongf;
 #  undef _LARGEFILE64_SOURCE
 #endif
 
-// FIXME
-# include <unistd.h>
-
 #if defined(__WATCOMC__) && !defined(Z_HAVE_UNISTD_H)
 #  define Z_HAVE_UNISTD_H
 #endif
